@@ -2,11 +2,14 @@
 
 Here I present code to develop the solutions for treatments of the Hubbard model, inluding: 
 
-### $t=0$  single-site approximation
+### t=0,  single-site approximation
 ### exact diagonalization for a 1x2 lattice
 ### exact diagonalization for a 2x2 lattice 
 
-Both of the exact diagonalization codes assume half-filling and an equal number of spin up and spin down particles.    The 2x2 code can be generalized for 3D lattices of arbitrary sites $l\times m \times n$, however not a lot of testing has been performed for systems above $1\times 2 \times 2$.
+Both of the exact diagonalization codes assume half-filling and an equal number
+of spin up and spin down particles.    The 2x2 code can be generalized for 3D
+lattices of arbitrary sites lxmxn, however not a lot of testing
+has been performed for systems above 1x2x2.
 
 ## Contributors
 
