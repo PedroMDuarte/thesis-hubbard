@@ -1,3 +1,6 @@
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.11558.png)](http://dx.doi.org/10.5281/zenodo.11558)
+
+
 ## A few simple treatments of the Hubbard model
 
 Here I present code to develop the solutions for treatments of the Hubbard model, inluding: 
