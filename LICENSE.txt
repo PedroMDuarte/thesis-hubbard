@@ -1,22 +1,6 @@
-## A few simple treatments of the Hubbard model
+T License (MIT)
 
-Here I present code to develop the solutions for treatments of the Hubbard model, inluding: 
-
-### $t=0$  single-site approximation
-### exact diagonalization for a 1x2 lattice
-### exact diagonalization for a 2x2 lattice 
-
-Both of the exact diagonalization codes assume half-filling and an equal number of spin up and spin down particles.    The 2x2 code can be generalized for 3D lattices of arbitrary sites $l\times m \times n$, however not a lot of testing has been performed for systems above $1\times 2 \times 2$.
-
-## Contributors
-
-This software was written by Pedro M. Duarte
-
-## License
-
-The MIT License (MIT)
-
-Copyright (c) [2014] [Pedro M Duarte]
+Copyright (c) [2014] [Pedro M. Duarte]
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,5 +19,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
 
