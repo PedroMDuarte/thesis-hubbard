@@ -94,8 +94,10 @@ class lattice():
         while n < 300:
             self.spins = self.state(n)
             
-            # The condition on this specifies only HALF-FILLING states 
-            if self.spins is not None and self.filling() == self.spins.size:
+            # ATTENTION: in this code we have changed to HALF-FILLING to 
+            # QUARTER-FILLING, in order to explore the 2x2 lattice with only
+            # 2 particles.   We use /2 in the filling check: 
+            if self.spins is not None and self.filling() == self.spins.size/2:
                 sec = self.sector()
                 if sec in self.states.keys():
                     self.states[ sec].append(self.spins) 
@@ -437,7 +439,7 @@ if __name__=="__main__":
             # Ensure the eigenvecs have correct phase
             vecs=[]
             for i in index:
-                vec = evecs[:,index[i]] 
+                vec = evecs[:,index[i]]
                 #Find first entry that is non-zero
                 i = list(np.abs(vec) > 1e-5).index(True)
                 vec = vec / np.sign(vec[i])
@@ -490,17 +492,17 @@ if __name__=="__main__":
         plotrows = int(np.sqrt(nstates))
         plotcols = plotrows
     else:
-        plotrows = 4 
-        plotcols = 9
+        plotrows = 2 
+        plotcols = 8
     
-    figure = plt.figure(figsize=(2.6*plotrows,2.0*plotrows))
+    figure = plt.figure(figsize=(4.5*plotrows,2.8*plotrows))
     print "Making %d x %d figure" % (plotrows, plotcols)
 
     gs0 = matplotlib.gridspec.GridSpec( 1,1, left=0.3, right=0.7,\
-               bottom=0.62, top=0.98) 
+               bottom=0.52, top=0.98) 
 
     gs = matplotlib.gridspec.GridSpec( plotrows, plotcols, \
-               left=0.03, right=0.98, bottom=0.05, top=0.55, \
+               left=0.03, right=0.98, bottom=0.05, top=0.42, \
                 wspace=0.14, hspace=0.05) 
     figure.suptitle('')
     ax = plt.subplot( gs0[0] ) 
@@ -514,7 +516,7 @@ if __name__=="__main__":
     ground = 0 
     high = nstates-1 
     if SITES == 4:
-        important = [ground, high, 6] 
+        important = [ground, high] 
     if SITES == 2:
         important = [ground, high] 
 
@@ -527,7 +529,7 @@ if __name__=="__main__":
     print "Importaant states = ", important 
 
     cc = 0 
-    c=['blue','green','red','black','purple','limegreen','orange','brown']
+    c=['blue','red', 'green','red','black','purple','limegreen','orange','brown']
     for col in range(eva.shape[1]):
         labeltxt = '%d'%col
         if col in important:
@@ -553,8 +555,10 @@ if __name__=="__main__":
   
     # Print out the ground state for various Us
     Uindex=U.size-1
+    #Uindex=0
     Eindex =0
     print
+    print "Energies = ", eva[Uindex,:]
     print "Ground state U=",U[Uindex],"  E=",eva[Uindex,Eindex], ":"
 
     # Organize the basis states by the magnitude of their projection
@@ -564,25 +568,18 @@ if __name__=="__main__":
         print "%02d --> % 02.6f   %s" %(i,eve[Uindex,i,Eindex], \
                                         puretext(b.states[0][i]))
     print "Ground state norm = ", np.linalg.norm( eve[Uindex,:,Eindex] )
-
-    
         
 
     frame_coding = { \
-        14: 'blue',\
-        21: 'blue',\
-
-        34: 'green',\
-        25: 'green',\
-        32: 'green',\
-        19: 'green',\
-        16: 'green',\
-        10: 'green',\
-        01: 'green',\
-        03: 'green',\
+        12: 'blue',\
+        07: 'blue',\
+        05: 'blue',\
+         9: 'blue',\
  
+         0: 'red',\
+        15: 'red',\
          8: 'red',\
-        27: 'red',\
+         3: 'red',\
        }
 
     for i,axv in enumerate(axvs):
@@ -622,7 +619,7 @@ if __name__=="__main__":
 
 
     #ax.grid()
-    ax.set_ylim(-6., 40.)
+    ax.set_ylim(-6., 20.)
     ax.set_xlabel('$U/t$')
     ax.set_ylabel('$E/t$')
     #ax.legend(loc='best',numpoints=1,ncol=int(nstates)//8,\
@@ -632,7 +629,6 @@ if __name__=="__main__":
     figure.savefig(outfile, dpi=250)
   
         
-        
     # Print out the analytical ground state calculated by R.Schuman 
     # (arXiv:cond-mat/0101476v1) 
 
@@ -640,47 +636,44 @@ if __name__=="__main__":
     u = 18. + 0j
 
     s3 = np.sqrt(3.)
-    X  = np.sqrt( -4096.*t**6 - 336.*t**4 * u**2 \
-                               - 48.*t**2 * u**4 - u**6 ) 
-    Y  =  -36.*t**2*u + s3*X 
+    X  = np.sqrt( -1.*( t**2 * ( 512.*t**4 + 26.*t**2*u**2 + u**4 ))) 
+    Y  = -36.*t**2*u + u**3. +  6.*np.sqrt(6.) * X 
 
-    C1n =  48. * (1 + 1j*s3) *t**2  + (3.+3j*s3) * u**2  \
-          - 6.*3.**(1./3.) * u * Y**(1./3.) \
-         +  3.**(1./6.) * ( -3j + s3 ) * Y**(2./3.) 
 
-    C1d =  16.*(3j+s3)*t**2 + (3j+s3)*u**2 + 2.*3.**(5./6.)*u* Y**(1./3.)  \
-          + 3.**(1./6.) * ( 1-1j*s3) * Y**(2./3.) 
+    C1n = 6j *np.sqrt(2.) * t * Y**(1./3.) 
 
-    C1 =  C1n / (6. * C1d ) 
+    C1d = -48. * ( -1j + s3)*t**2 - ( -1j + s3)*u**2  + 4j*u *  Y**(1./3.)  \
+          + (1j+s3) * Y**(2./3.) 
 
-    C2n = 96. * 2**(1./3.) * ( 1+1j*s3)*t**2 + 6.*2**(1./3.) * (1+1j*s3)*u**2 \
-         - 6j * 2.**(1./3.) * 3.**(1./6.) * Y**(2./3.) \
-         -12.*u * (6.*Y)**(1./3.) + 2.**(2./3.) * (6*Y)**(2./3.) 
-   
-    C2d = 96.*s3 * t * ( 6. * Y )**(1./3.) 
+    C1 = C1n / C1d 
 
-    C2 = C2n /C2d 
+    C2n = 6j *np.sqrt(2.) * t * Y**(1./3.) 
+    
+    C2d = -48. * ( -1j + s3)*t**2 + ( -u + Y**(1./3.) ) * \
+                 ( (-1j+s3)*u + (1j+s3)* Y**(1./3.)) 
 
-    C3 = -1. / s3 
+    C2 = C2n / C2d 
   
-    C4 =  1 / ( 2. *s3 )
+    C3 = -1 / (2.*np.sqrt(2.) )
+
 
     print "Schumman eigenvector result:"
     print "C1 = ",C1
     print "C2 = ",C2
     print "C3 = ",C3
-    print "C4 = ",C4
 
-    print "Schumman norm = ",  \
-             4.*np.abs(C1)**2  +  16.*np.abs(C2)**2 \
-           + 2.*np.abs(C3)**2  +   4.*np.abs(C4)**2
+ 
+    norm =  4.*np.abs(C1)**2  +  4.*np.abs(C2)**2 \
+          + 8.*np.abs(C3)**2 
+    print "Schumman norm = ",  norm\
 
+    print "Schumman eigenvector (normalized):"
+    print "C1 = ",C1 / np.sqrt(norm)
+    print "C2 = ",C2 / np.sqrt(norm)
+    print "C3 = ",C3 / np.sqrt(norm)
+    
 
     # It seems that my eigenvectors are correct, by comparing to the 
     # analytical result by schuman
+           
   
-
-
-        
-    
-    
